@@ -27,15 +27,14 @@ pipeline {
 
         stage('Run Application') {
             steps {
-                echo 'Starting Flask application'
-                bat 'powershell -NoProfile -ExecutionPolicy Bypass -File run_app.ps1'
+                echo 'Application deployment is ready for execution'
             }
         }
 
         stage('Test Application') {
             steps {
-                echo 'Verifying deployed application'
-                bat 'powershell -NoProfile -ExecutionPolicy Bypass -File verify_app.ps1'
+                echo 'Starting and verifying Flask application'
+                bat 'venv\\Scripts\\python.exe verify_app.py'
             }
         }
     }
