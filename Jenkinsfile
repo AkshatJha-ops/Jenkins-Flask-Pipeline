@@ -28,14 +28,14 @@ pipeline {
         stage('Run Application') {
             steps {
                 echo 'Starting Flask application'
-                bat 'powershell -NoProfile -Command "$p = Start-Process -FilePath (Resolve-Path venv\\Scripts\\python.exe) -ArgumentList ''deploy\\app.py'' -PassThru; Set-Content app.pid $p.Id"'
+                bat 'powershell -NoProfile -ExecutionPolicy Bypass -File run_app.ps1'
             }
         }
 
         stage('Test Application') {
             steps {
                 echo 'Verifying deployed application'
-                bat 'powershell -NoProfile -Command "$ok = $false; for ($i=0; $i -lt 15; $i++) { try { $r = Invoke-RestMethod http://localhost:5000/ -TimeoutSec 2; if ($r.status -eq ''success'') { $ok = $true; break } } catch { Start-Sleep -Seconds 2 } }; if (-not $ok) { throw ''Application verification failed'' }"'
+                bat 'powershell -NoProfile -ExecutionPolicy Bypass -File verify_app.ps1'
             }
         }
     }
